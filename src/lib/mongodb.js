@@ -1,24 +1,19 @@
 import { MongoClient } from "mongodb";
 
 const uri = process.env.MONGODB_URI;
-const options = {};
+if (!uri) throw new Error("Please add MONGODB_URI to .env");
 
+const options = {};
 let client;
 let clientPromise;
 
-if (!process.env.MONGODB_URI) {
-    throw new Error("Please add your MongoDB URI to .env.local");
-}
-
 if (process.env.NODE_ENV === "development") {
-    // Use a global variable so the value is preserved across HMR (hot reloads)
     if (!global._mongoClientPromise) {
         client = new MongoClient(uri, options);
         global._mongoClientPromise = client.connect();
     }
     clientPromise = global._mongoClientPromise;
 } else {
-    // In production, it's best to not use a global variable
     client = new MongoClient(uri, options);
     clientPromise = client.connect();
 }
