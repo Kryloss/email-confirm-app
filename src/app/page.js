@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
+import Link from "next/link";
 
 export default function Home() {
     const [email, setEmail] = useState("");
@@ -18,7 +19,7 @@ export default function Home() {
             const res = await signIn("email", { email, redirect: false });
             if (res?.ok) setMsg("Check your email for the sign-in link.");
             else setMsg("Could not send email. Double-check .env and server logs.");
-        } catch (e) {
+        } catch {
             setMsg("Unexpected error. See terminal logs.");
         } finally {
             setBusy(false);
@@ -45,7 +46,7 @@ export default function Home() {
             </button>
             {msg && <p style={{ marginTop: 12 }}>{msg}</p>}
             <p style={{ marginTop: 16 }}>
-                Or open the NextAuth page directly: <a href="/api/auth/signin">/api/auth/signin</a>
+                Or open the NextAuth page directly: <Link href="/api/auth/signin">/api/auth/signin</Link>
             </p>
         </div>
     );
